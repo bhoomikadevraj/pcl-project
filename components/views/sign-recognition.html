@@ -1,0 +1,20 @@
+<div class="view" id="sign">
+  <div class="view-header">
+    <h1 class="view-title">Sign to Speech</h1>
+    <p class="view-subtitle">Webcam-based sign language recognition demo</p>
+  </div>
+
+  <div class="card">
+    <div class="btn-group">
+      <button id="startCam" class="btn btn-primary">📷 Start Camera</button>
+      <button id="stopCam" class="btn btn-secondary">⏹ Stop Camera</button>
+    </div>
+    <div class="video-container">
+      <video id="webcam" autoplay muted playsinline></video>
+    </div>
+    <div id="signStatus" class="status-text">Sign: (stopped)</div>
+    <div id="cameraHelp" class="help-text" hidden>
+      <strong>Camera permission needed.</strong> Please click <em>Allow</em> when the browser asks.
+    </div>
+  </div>
+</div>

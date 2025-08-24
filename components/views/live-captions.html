@@ -1,0 +1,22 @@
+<div class="view" id="captions-sign">
+  <div class="view-header">
+    <h1 class="view-title">Live Captions</h1>
+    <p class="view-subtitle">Real-time speech-to-text for deaf and hard-of-hearing users</p>
+  </div>
+
+  <div class="card">
+    <div class="form-group">
+      <label class="form-label">Language</label>
+      <select id="sttLang">
+        <option value="en-IN" selected>English (India)</option>
+        <option value="en-US">English (US)</option>
+        <option value="hi-IN">Hindi (India)</option>
+        <option value="kn-IN">Kannada (India)</option>
+      </select>
+    </div>
+    <div class="btn-group">
+      <button id="toggleSTT" class="btn btn-primary">🎤 Start Speech Recognition</button>
+    </div>
+    <div id="captions" class="output-area" style="margin-top:16px;"></div>
+  </div>
+</div>
