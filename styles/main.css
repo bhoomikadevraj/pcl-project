@@ -1,23 +1,24 @@
 /* Professional design system */
 :root{
-  --bg:#f8fafc;
-  --panel:#ffffff;
+  /* Emerald Calm */
+  --bg:#f6fbf8;        /* airy, soft greenish background */
+  --panel:#ffffff;      /* crisp cards/panels */
   --card:#ffffff;
-  --surface:#f1f5f9;
-  --ink:#0f172a;
-  --muted:#64748b;
-  --line:#e2e8f0;
-  --primary:#3b82f6;
-  --primary-600:#2563eb;
-  --primary-50:#eff6ff;
-  --success:#10b981;
+  --surface:#eef7f2;    /* subtle surface */
+  --ink:#0f172a;        /* dark slate text */
+  --muted:#475569;      /* cooler muted text */
+  --line:#e2e8f0;       /* gentle borders */
+  --primary:#10b981;    /* emerald */
+  --primary-600:#059669;/* deeper emerald */
+  --primary-50:#ecfdf5; /* emerald tint */
+  --success:#10b981;    /* success aligned to primary */
   --success-600:#059669;
-  --success-50:#dcfce7;
-  --warning:#f59e0b;
+  --success-50:#ecfdf5;
+  --warning:#f59e0b;    /* amber */
   --warning-50:#fef3c7;
-  --error:#ef4444;
-  --shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --error:#ef4444;      /* red */
+  --shadow:0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-lg:0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.06);
 }
 
 *{ box-sizing:border-box }
@@ -43,6 +44,12 @@ header {
 .header-container{
   max-width:1400px; margin:0 auto;
   display:flex; align-items:center; justify-content:space-between;
+}
+
+/* Menu button visibility: hidden on desktop, visible on <=1024px */
+#sidebarToggle{ display:none; }
+@media (max-width: 1024px){
+  #sidebarToggle{ display:inline-flex; }
 }
 
 .brand{
@@ -118,14 +125,16 @@ header {
   cursor:pointer;
 }
 
-.nav-item:hover{
-  background:var(--surface);
+@media (min-width: 1025px){
+  .nav-item{ border:1px solid var(--line); background:transparent; }
+  .nav-item:hover{ background:var(--surface); }
 }
 
 .nav-item.active{
   background:var(--primary-50);
   color:var(--primary-600);
   font-weight:600;
+  border:1px solid var(--line);
 }
 
 .nav-icon{
@@ -203,6 +212,10 @@ header {
   flex:1; padding:24px; overflow-y:auto;
 }
 
+@media (min-width: 1025px){
+  .main-content{ padding:32px; }
+}
+
 .view{
   display:none;
 }
@@ -228,7 +241,7 @@ header {
 .card{
   background:var(--panel);
   border:1px solid var(--line);
-  border-radius:12px;
+  border-radius:14px;
   padding:24px;
   box-shadow: var(--shadow);
   margin-bottom:24px;
