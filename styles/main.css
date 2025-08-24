@@ -151,7 +151,7 @@ header {
   text-transform:uppercase;
 }
 
-/* Off-canvas sidebar behavior for tablet and below */
+/* Dropdown sidebar behavior for tablet and below (slides down under header) */
 @media (max-width: 1024px) {
   .app-layout{
     position:relative;
@@ -159,15 +159,25 @@ header {
 
   .sidebar{
     position:fixed;
-    left:0; top:73px;
-    height:calc(100vh - 73px);
-    transform: translateX(-100%);
+    left:0; right:0; top:73px;
+    width:100%;
+    max-height:calc(100vh - 73px);
+    overflow-y:auto;
+    transform: translateY(-110%);
     transition: transform 0.25s ease;
     z-index:60; /* above backdrop */
+    box-shadow: var(--shadow-lg);
   }
 
   body.sidebar-open .sidebar{
-    transform: translateX(0);
+    transform: translateY(0);
+  }
+
+  /* Make nav vertical in dropdown */
+  .nav-list{
+    flex-direction:column;
+    overflow-x:initial;
+    gap:8px;
   }
 
   /* Prevent background scroll when sidebar is open */
@@ -429,24 +439,14 @@ video{
     flex-direction:column;
   }
 
-  .sidebar{
-    width:100%;
-    position:static;
-    height:auto;
-    border-right:none;
-    border-bottom:1px solid var(--line);
-  }
+  /* Keep dropdown behavior on small screens; ensure full width */
+  .sidebar{ width:100%; border-right:none; }
 
-  .nav-list{
-    flex-direction:row;
-    overflow-x:auto;
-    gap:8px;
-    padding-bottom:8px;
-  }
+  /* Vertical list on mobile */
+  .nav-list{ flex-direction:column; overflow-x:initial; gap:8px; padding-bottom:0; }
 
   .nav-item{
     flex-shrink:0;
-    min-width:120px;
   }
 
   .tiles-grid{
