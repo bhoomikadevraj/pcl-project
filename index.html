@@ -23,6 +23,7 @@
     }
 
     *{ box-sizing:border-box }
+    html{ scroll-behavior:smooth }
     body {
       margin:0; height:100vh; display:flex; flex-direction:column;
       background:
@@ -38,14 +39,62 @@
     header {
       background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.75));
       border-bottom:1px solid var(--line);
-      padding:14px 20px; text-align:center; font-weight:700; letter-spacing:.2px;
+      padding:12px 20px; text-align:center; font-weight:700; letter-spacing:.2px;
       position:sticky; top:0; z-index:10; backdrop-filter: saturate(140%) blur(6px);
     }
 
-    main {
-      flex:1; overflow:auto; padding:24px; display:grid; gap:22px; grid-template-columns: 1fr; max-width:1200px; width:100%; margin:0 auto;
+    /* Header layout */
+    .header-bar{ text-align:initial }
+    .container{ max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:16px }
+    .brand{ display:flex; align-items:center; gap:12px }
+    .logo{ font-size:22px; line-height:1 }
+    .brand-text{ display:flex; flex-direction:column }
+    .title{ font-size:18px; font-weight:800; color:var(--ink); letter-spacing:.2px }
+    .subtitle{ font-size:13px; color:var(--muted); font-weight:500 }
+    nav{ display:flex; align-items:center; gap:10px }
+    .btn-link{ color:#0f172a; font-size:13px; padding:8px 10px; border-radius:8px; border:1px solid var(--line); background:#fff; text-decoration:none }
+    .btn-link:hover{ background:#f8fafc }
+
+    /* Page layout: sidebar + content */
+    .layout{ flex:1; width:100%; max-width:1200px; margin:0 auto; padding:24px; display:grid; grid-template-columns: 1fr; gap:20px }
+    @media(min-width:960px){ .layout{ grid-template-columns: 280px 1fr } }
+
+    aside.sidebar{
+      background:#ffffff; border:1px solid var(--line); border-radius:16px; box-shadow: var(--shadow); padding:16px; position:sticky; top:82px; height:fit-content
     }
-    @media(min-width:1000px){ main{ grid-template-columns: 1fr 1fr } }
+    .side-brand{ display:flex; align-items:center; gap:10px; margin-bottom:12px }
+    .side-brand .logo{ font-size:22px }
+    .side-brand .title{ font-size:16px }
+    .side-note{ font-size:12px; color:var(--muted); margin-bottom:10px }
+    .side-nav{ display:flex; flex-direction:column; gap:10px }
+    .nav-card{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:12px; border:1px solid var(--line); border-radius:14px; background:#fff; text-decoration:none; color:var(--ink);
+      box-shadow: 0 1px 0 rgba(15,23,42,.04);
+    }
+    .nav-card:hover{ background:#f8fafc }
+    .nav-card.active{ outline:2px solid rgba(37,99,235,.22) }
+    .nav-info{ display:flex; align-items:center; gap:10px }
+    .nav-icon{ font-size:18px }
+    .nav-text{ display:flex; flex-direction:column; line-height:1.2 }
+    .nav-title{ font-weight:700; font-size:14px }
+    .nav-sub{ font-size:12px; color:var(--muted) }
+    .badge-live{ font-size:11px; background:#dcfce7; color:#166534; padding:2px 8px; border-radius:999px }
+
+    /* Sidebar status card */
+    .status-card{ margin-top:12px; padding:12px; border:1px solid var(--line); border-radius:14px; background:#f8fafc; display:flex; align-items:center; justify-content:space-between }
+    .status-left{ display:flex; align-items:center; gap:10px }
+    .dot{ width:10px; height:10px; border-radius:50% }
+    .dot.green{ background:#16a34a }
+    .status-text{ display:flex; flex-direction:column; line-height:1.2 }
+    .status-title{ font-weight:700; font-size:14px }
+    .status-sub{ font-size:12px; color:var(--muted) }
+
+    /* Main content grid */
+    main {
+      overflow:visible; padding:0; display:grid; gap:22px; grid-template-columns: 1fr; width:100%;
+    }
+    @media(min-width:1100px){ main{ grid-template-columns: 1fr 1fr } }
 
     h2{ margin:6px 0 12px; font-size:18px; font-weight:700; letter-spacing:.2px; color:#0b1220 }
 
@@ -118,27 +167,107 @@
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
 </head>
 <body>
-  <header>🤟 <strong>Sign Sync</strong> – Accessible Communicator</header>
+  <header class="header-bar">
+    <div class="container">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">🤟</div>
+        <div class="brand-text">
+          <div class="title">Sign Sync</div>
+          <div class="subtitle">Accessible communicator for deaf, mute, and hearing users</div>
+        </div>
+      </div>
+      <nav aria-label="Primary">
+        <a class="btn-link" href="#tiles">Tiles</a>
+        <a class="btn-link" href="#captions-sign">Captions & Sign</a>
+        <a class="btn-link" href="#env-tests">Tests</a>
+      </nav>
+    </div>
+  </header>
 
-  <main>
-    <!-- Column A -->
-    <section class="section">
-      <h2>Quick Phrases</h2>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-brand">
+        <div class="logo" aria-hidden="true">🤟</div>
+        <div class="brand-text">
+          <div class="title">Sign Sync</div>
+          <div class="subtitle">Dashboard</div>
+        </div>
+      </div>
+      <div class="side-note">Quick links</div>
+      <nav class="side-nav" aria-label="Sidebar">
+        <a class="nav-card active" href="#tiles">
+          <div class="nav-info">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-text"><div class="nav-title">Dashboard</div><div class="nav-sub">Overview & quick actions</div></div>
+          </div>
+          <div class="nav-trail" aria-hidden="true">▸</div>
+        </a>
+        <a class="nav-card" href="#custom-phrase">
+          <div class="nav-info">
+            <div class="nav-icon">💬</div>
+            <div class="nav-text"><div class="nav-title">Custom Phrase</div><div class="nav-sub">Create & save phrases</div></div>
+          </div>
+          <div class="nav-trail" aria-hidden="true">▸</div>
+        </a>
+        <a class="nav-card" href="#captions-sign">
+          <div class="nav-info">
+            <div class="nav-icon">🎤</div>
+            <div class="nav-text"><div class="nav-title">Live Captions</div><div class="nav-sub">Real-time STT <span class="badge-live">LIVE</span></div></div>
+          </div>
+          <div class="nav-trail" aria-hidden="true">▸</div>
+        </a>
+        <a class="nav-card" href="#sign">
+          <div class="nav-info">
+            <div class="nav-icon">📷</div>
+            <div class="nav-text"><div class="nav-title">Sign to Speech</div><div class="nav-sub">Webcam-based demo</div></div>
+          </div>
+          <div class="nav-trail" aria-hidden="true">▸</div>
+        </a>
+        <a class="nav-card" href="#env-tests">
+          <div class="nav-info">
+            <div class="nav-icon">🧪</div>
+            <div class="nav-text"><div class="nav-title">Environment Tests</div><div class="nav-sub">Permissions & support</div></div>
+          </div>
+          <div class="nav-trail" aria-hidden="true">▸</div>
+        </a>
+      </nav>
+      <div class="status-card" role="status" aria-live="polite">
+        <div class="status-left">
+          <span class="dot green" aria-hidden="true"></span>
+          <div class="status-text">
+            <div class="status-title">System Online</div>
+            <div class="status-sub">All systems operational</div>
+          </div>
+        </div>
+        <div class="status-right" aria-hidden="true">⚡</div>
+      </div>
+    </aside>
+    <main>
+    <!-- Panel 1: Dashboard -->
+    <section class="section" id="tiles">
+      <h2>Dashboard – Quick Phrases</h2>
       <div id="grid" class="grid"></div>
 
-      <h2>Custom Phrase</h2>
-      <input id="customText" type="text" placeholder="Type your phrase…" />
-      <div>
-        <button id="speakCustom">Speak</button>
-        <button id="saveCustom" class="secondary">Save Phrase</button>
+      <div style="margin-top:12px">
+        <a class="btn-link" href="#custom-phrase">➕ Add a custom phrase</a>
       </div>
 
       <h2>Conversation Log</h2>
       <div id="log" class="log" aria-live="polite"></div>
     </section>
 
-    <!-- Column B -->
-    <section class="section">
+    <!-- Panel 2: Custom Phrase -->
+    <section class="section" id="custom-phrase">
+      <h2>Custom Phrase</h2>
+      <input id="customText" type="text" placeholder="Type your phrase…" />
+      <div>
+        <button id="speakCustom">Speak</button>
+        <button id="saveCustom" class="secondary">Save Phrase</button>
+      </div>
+    </section>
+
+    <!-- Panel 3: Captions & Sign -->
+    <section class="section" id="captions-sign">
       <h2>Live Captions (for Deaf)</h2>
       <div>
         <button id="toggleSTT">🎤 Start Speech Recognition</button>
@@ -151,7 +280,7 @@
       </div>
       <div id="captions" class="captions" aria-live="polite"></div>
 
-      <h2 style="margin-top:16px">Sign-to-Speech (Webcam Demo)</h2>
+      <h2 id="sign" style="margin-top:16px">Sign-to-Speech (Webcam Demo)</h2>
       <div>
         <button id="startCam">📷 Start Camera</button>
         <button id="stopCam" class="secondary">⏹ Stop Camera</button>
@@ -174,7 +303,7 @@
     </section>
 
     <!-- Diagnostics / Tests -->
-    <section class="section" style="grid-column:1 / -1">
+    <section class="section" id="env-tests" style="grid-column:1 / -1">
       <h2>Environment Tests</h2>
       <div>
         <button id="runTests" class="secondary">Run Tests</button>
@@ -183,7 +312,8 @@
     </section>
 
     <footer>Sign Sync – Tiles, Captions & Sign Recognition. Your data is stored locally in your browser. Camera & mic permissions are required for some features.</footer>
-  </main>
+    </main>
+  </div>
 
   <script>
     /* -----------------------------
@@ -200,6 +330,26 @@
     const signStatus = document.getElementById('signStatus');
     const cameraHelp = document.getElementById('cameraHelp');
     const testResults = document.getElementById('testResults');
+    // Sidebar scrollspy
+    const sideLinks = Array.from(document.querySelectorAll('.side-nav a'));
+    const targets = sideLinks.map(a=>{
+      const id = a.getAttribute('href').slice(1);
+      return { id, el: document.getElementById(id), link: a };
+    }).filter(t=>t.el);
+
+    function setActiveByScroll(){
+      const offset = 120; // header+spacing
+      let current = null;
+      for(const t of targets){
+        const rect = t.el.getBoundingClientRect();
+        if(rect.top - offset <= 0) current = t; else break;
+      }
+      sideLinks.forEach(a=>a.classList.remove('active'));
+      (current?.link || sideLinks[0])?.classList.add('active');
+    }
+    window.addEventListener('scroll', setActiveByScroll, { passive:true });
+    window.addEventListener('resize', setActiveByScroll);
+    window.addEventListener('load', setActiveByScroll);
 
     function isSecureContextOk(){
       const h = location.hostname;
