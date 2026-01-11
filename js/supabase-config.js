@@ -54,6 +54,7 @@ async function initAuth() {
       } else if (event === 'SIGNED_OUT') {
         showView('dashboard');
         showNotification('Signed out successfully', 'success');
+        clearUserPhrases();
       }
     });
   } catch (error) {
@@ -79,9 +80,14 @@ function updateAuthUI() {
       profileBtn.querySelector('.profile-icon').textContent = '✓';
     }
     if (customPhraseNav) {
-      customPhraseNav.style.display = 'flex';
       customPhraseNav.style.pointerEvents = 'auto';
       customPhraseNav.style.opacity = '1';
+      customPhraseNav.style.cursor = 'pointer';
+      customPhraseNav.classList.remove('locked');
+      customPhraseNav.title = '';
+      // Remove lock icon if present
+      const lockIcon = customPhraseNav.querySelector('.lock-icon');
+      if (lockIcon) lockIcon.remove();
     }
   } else {
     // User is signed out
@@ -92,10 +98,18 @@ function updateAuthUI() {
       profileBtn.querySelector('.profile-icon').textContent = '👤';
     }
     if (customPhraseNav) {
-      customPhraseNav.style.display = 'flex';
-      customPhraseNav.style.pointerEvents = 'none';
-      customPhraseNav.style.opacity = '0.5';
-      customPhraseNav.title = 'Sign in to use custom phrases';
+      customPhraseNav.style.pointerEvents = 'auto'; // Allow clicks to show notification
+      customPhraseNav.style.opacity = '0.6';
+      customPhraseNav.style.cursor = 'not-allowed';
+      customPhraseNav.classList.add('locked');
+      customPhraseNav.title = 'Sign in to use this feature';
+      // Add lock icon if not present
+      if (!customPhraseNav.querySelector('.lock-icon')) {
+        const lockIcon = document.createElement('span');
+        lockIcon.className = 'lock-icon';
+        lockIcon.textContent = '🔒';
+        customPhraseNav.querySelector('.nav-content').appendChild(lockIcon);
+      }
     }
   }
 }

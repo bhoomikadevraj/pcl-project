@@ -156,6 +156,21 @@ header {
   border:1px solid var(--line);
 }
 
+.nav-item.locked {
+  position: relative;
+  filter: grayscale(0.5);
+}
+
+.nav-item.locked:hover {
+  background: var(--surface) !important;
+}
+
+.lock-icon {
+  font-size: 12px;
+  margin-left: auto;
+  opacity: 0.7;
+}
+
 .nav-icon{
   font-size:18px; width:20px; text-align:center;
 }

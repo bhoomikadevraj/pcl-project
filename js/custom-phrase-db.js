@@ -2,6 +2,34 @@
    Custom Phrase Database Operations
 ----------------------------- */
 
+// Clear user's custom phrases (reset to default tiles)
+function clearUserPhrases() {
+  console.log('Clearing user custom phrases');
+  const defaultTiles = [
+    { emoji: "👋", label: "Hello", phrase: "Hello!" },
+    { emoji: "👍", label: "Yes", phrase: "Yes" },
+    { emoji: "👎", label: "No", phrase: "No" },
+    { emoji: "🙏", label: "Please", phrase: "Please" },
+    { emoji: "😊", label: "Thank You", phrase: "Thank you" },
+    { emoji: "❤️", label: "I Love You", phrase: "I love you" },
+    { emoji: "🆘", label: "Help", phrase: "I need help" },
+    { emoji: "😢", label: "Sorry", phrase: "I'm sorry" },
+    { emoji: "👌", label: "OK", phrase: "Okay" },
+    { emoji: "⏰", label: "Wait", phrase: "Please wait" },
+    { emoji: "🚫", label: "Stop", phrase: "Stop" },
+    { emoji: "🍽️", label: "Hungry", phrase: "I'm hungry" },
+    { emoji: "💧", label: "Thirsty", phrase: "I'm thirsty" },
+    { emoji: "😴", label: "Tired", phrase: "I'm tired" },
+    { emoji: "🤒", label: "Sick", phrase: "I don't feel well" },
+    { emoji: "🚻", label: "Bathroom", phrase: "I need the bathroom" },
+    { emoji: "👋", label: "Goodbye", phrase: "Goodbye" },
+    { emoji: "🙂", label: "I'm Fine", phrase: "I'm fine" },
+  ];
+  tiles = [...defaultTiles];
+  renderTiles();
+  localStorage.removeItem('tiles'); // Clear saved custom tiles
+}
+
 // Load user's custom phrases from Supabase
 async function loadUserPhrases() {
   if (!currentUser) {
@@ -50,7 +78,19 @@ async function loadUserPhrases() {
         { emoji: "👎", label: "No", phrase: "No" },
         { emoji: "🙏", label: "Please", phrase: "Please" },
         { emoji: "😊", label: "Thank You", phrase: "Thank you" },
+        { emoji: "❤️", label: "I Love You", phrase: "I love you" },
         { emoji: "🆘", label: "Help", phrase: "I need help" },
+        { emoji: "😢", label: "Sorry", phrase: "I'm sorry" },
+        { emoji: "👌", label: "OK", phrase: "Okay" },
+        { emoji: "⏰", label: "Wait", phrase: "Please wait" },
+        { emoji: "🚫", label: "Stop", phrase: "Stop" },
+        { emoji: "🍽️", label: "Hungry", phrase: "I'm hungry" },
+        { emoji: "💧", label: "Thirsty", phrase: "I'm thirsty" },
+        { emoji: "😴", label: "Tired", phrase: "I'm tired" },
+        { emoji: "🤒", label: "Sick", phrase: "I don't feel well" },
+        { emoji: "🚻", label: "Bathroom", phrase: "I need the bathroom" },
+        { emoji: "👋", label: "Goodbye", phrase: "Goodbye" },
+        { emoji: "🙂", label: "I'm Fine", phrase: "I'm fine" },
       ];
       
       tiles = [...defaultTiles, ...userPhrases];

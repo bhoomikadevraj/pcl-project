@@ -48,24 +48,17 @@ function initSignRecognition() {
     if(results.multiHandLandmarks && results.multiHandLandmarks.length){
       const lm = results.multiHandLandmarks[0];
       
-      // More strict detection logic with multiple conditions
-      // Thumb up: thumb tip above all other finger tips, other fingers closed
-      const thumbUp = lm[4].y < lm[3].y - 0.05 && 
-                      lm[4].y < lm[2].y - 0.05 &&
-                      lm[4].y < lm[8].y &&  // thumb above index
-                      lm[8].y > lm[6].y &&  // index finger closed
-                      lm[12].y > lm[10].y && // middle finger closed
-                      lm[16].y > lm[14].y && // ring finger closed
-                      lm[20].y > lm[18].y;   // pinky closed
+      // Thumb up: thumb tip clearly above thumb base and other fingers mostly closed
+      const thumbUp = lm[4].y < lm[2].y - 0.08 &&  // thumb tip well above thumb base
+                      lm[4].y < lm[8].y - 0.05 &&  // thumb above index finger
+                      lm[8].y > lm[6].y - 0.03 &&  // index not fully extended
+                      lm[12].y > lm[10].y - 0.03;  // middle not fully extended
       
-      // Thumb down: thumb tip below all other finger tips, other fingers closed
-      const thumbDown = lm[4].y > lm[3].y + 0.05 && 
-                        lm[4].y > lm[2].y + 0.05 &&
-                        lm[4].y > lm[8].y &&  // thumb below index
-                        lm[8].y > lm[6].y &&  // index finger closed
-                        lm[12].y > lm[10].y && // middle finger closed
-                        lm[16].y > lm[14].y && // ring finger closed
-                        lm[20].y > lm[18].y;   // pinky closed
+      // Thumb down: thumb tip clearly below thumb base and other fingers mostly closed
+      const thumbDown = lm[4].y > lm[2].y + 0.08 &&  // thumb tip well below thumb base
+                        lm[4].y > lm[8].y + 0.05 &&  // thumb below index finger
+                        lm[8].y > lm[6].y - 0.03 &&  // index not fully extended
+                        lm[12].y > lm[10].y - 0.03;  // middle not fully extended
       
       // Open palm: all fingers extended upward with good spacing
       const openPalm = lm[8].y < lm[6].y - 0.03 &&   // index extended
@@ -75,9 +68,40 @@ function initSignRecognition() {
                        Math.abs(lm[8].x - lm[12].x) > 0.02 && // fingers spread
                        lm[4].y < lm[3].y; // thumb also up
       
+      // Peace sign: index and middle extended, others closed
+      const peaceSig = lm[8].y < lm[6].y - 0.05 &&   // index extended
+                       lm[12].y < lm[10].y - 0.05 &&  // middle extended
+                       lm[16].y > lm[14].y &&          // ring closed
+                       lm[20].y > lm[18].y &&          // pinky closed
+                       Math.abs(lm[8].x - lm[12].x) > 0.04; // two fingers spread
+      
+      // Pointing (index finger only extended)
+      const pointing = lm[8].y < lm[6].y - 0.05 &&   // index extended
+                       lm[12].y > lm[10].y &&          // middle closed
+                       lm[16].y > lm[14].y &&          // ring closed
+                       lm[20].y > lm[18].y &&          // pinky closed
+                       lm[4].y > lm[3].y;             // thumb not up
+      
+      // Fist: all fingers curled
+      const fist = lm[8].y > lm[6].y &&   // index curled
+                   lm[12].y > lm[10].y &&  // middle curled
+                   lm[16].y > lm[14].y &&  // ring curled
+                   lm[20].y > lm[18].y &&  // pinky curled
+                   !thumbUp && !thumbDown; // not a thumb gesture
+      
+      // OK sign: thumb and index touching, other fingers extended
+      const okSign = Math.abs(lm[4].x - lm[8].x) < 0.04 &&  // thumb and index close
+                     Math.abs(lm[4].y - lm[8].y) < 0.04 &&
+                     lm[12].y < lm[10].y - 0.03 &&  // middle extended
+                     lm[16].y < lm[14].y - 0.03;     // ring extended
+      
       let label = '';
-      if(thumbUp) label = '👍 Yes'; 
-      else if(thumbDown) label = '👎 No'; 
+      if(thumbUp && !openPalm) label = '👍 Yes'; 
+      else if(thumbDown && !openPalm) label = '👎 No'; 
+      else if(okSign) label = '👌 OK';
+      else if(peaceSig && !openPalm) label = '✌️ Peace';
+      else if(pointing) label = '☝️ Wait';
+      else if(fist) label = '✊ Stop';
       else if(openPalm) label = '👋 Hello';
       
       if(label){
@@ -92,7 +116,15 @@ function initSignRecognition() {
               ? 'No' 
               : /👋/.test(label)
                 ? 'Hello'
-                : '';
+                : /👌/.test(label)
+                  ? 'Okay'
+                  : /✌️/.test(label)
+                    ? 'Peace'
+                    : /☝️/.test(label)
+                      ? 'Wait'
+                      : /✊/.test(label)
+                        ? 'Stop'
+                        : '';
           speak(phrase); 
           addToLog(phrase);
         } else {

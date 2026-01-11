@@ -5,8 +5,8 @@
 function showView(viewId) {
   // Check if custom phrase requires auth
   if (viewId === 'custom-phrase' && !currentUser) {
-    showNotification('Please sign in to use custom phrases', 'error');
-    viewId = 'dashboard'; // Redirect to dashboard
+    showNotification('You need to sign in to use this feature', 'error');
+    return; // Don't change view, stay on current view
   }
   
   // Hide all views
