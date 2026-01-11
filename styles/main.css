@@ -281,9 +281,25 @@ header {
   margin-bottom:24px;
 }
 
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.card-header .card-title {
+  margin: 0;
+}
+
 .card-title{
   font-size:18px; font-weight:600; color:var(--ink);
   margin:0 0 16px 0;
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 13px;
 }
 
 /* Tiles Grid */

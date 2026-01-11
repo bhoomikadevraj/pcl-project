@@ -51,6 +51,7 @@ async function initAuth() {
         showView('dashboard');
         showNotification('Welcome back!', 'success');
         loadUserPhrases();
+        loadLogsFromDb();
       } else if (event === 'SIGNED_OUT') {
         showView('dashboard');
         showNotification('Signed out successfully', 'success');

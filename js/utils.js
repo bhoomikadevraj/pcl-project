@@ -43,6 +43,29 @@ function addToLog(msg){
   } catch(e) {
     console.warn('Failed to save log to localStorage:', e);
   }
+  
+  // Save to Supabase if user is signed in
+  if (typeof saveLogToDb === 'function') {
+    saveLogToDb(sanitized);
+  }
+}
+
+function clearConversationLog() {
+  const logEl = document.getElementById('log');
+  if (logEl) {
+    logEl.innerHTML = '';
+  }
+  
+  try {
+    localStorage.removeItem('logs');
+  } catch(e) {
+    console.warn('Failed to clear logs from localStorage:', e);
+  }
+  
+  // Note: Logs are kept in database for record-keeping
+  // Only clearing from user's view and localStorage
+  
+  showNotification('Conversation log cleared', 'success');
 }
 
 async function loadComponent(url) {
