@@ -35,21 +35,21 @@ function initSignRecognition() {
       const openPalm  = lm[8].y < lm[6].y && lm[12].y < lm[10].y && lm[16].y < lm[14].y && lm[20].y < lm[18].y;
       
       let label = '';
-      if(thumbUp) label = '👍 Dishes done'; 
-      else if(thumbDown) label = '👎 Dishes remaining'; 
-      else if(openPalm) label = '👋 Do dishes';
+      if(thumbUp) label = '👍 Yes'; 
+      else if(thumbDown) label = '👎 No'; 
+      else if(openPalm) label = '👋 Hello';
       
       if(label){
         const now = Date.now();
         if(label !== lastSign || (now - lastAt) > 1500){
           lastSign = label; lastAt = now;
           signStatus.textContent = 'Sign: ' + label;
-          const phrase = /Dishes done/.test(label) 
-            ? 'Dishes done' 
-            : /Dishes remaining/.test(label) 
-              ? 'Dishes remaining' 
-              : /Do dishes/.test(label)
-                ? 'Do dishes'
+          const phrase = /👍/.test(label) 
+            ? 'Yes' 
+            : /👎/.test(label) 
+              ? 'No' 
+              : /👋/.test(label)
+                ? 'Hello'
                 : '';
           speak(phrase); 
           addToLog(phrase);

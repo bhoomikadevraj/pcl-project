@@ -1,32 +1,31 @@
 <div class="view active" id="dashboard">
   <div class="view-header">
     <h1 class="view-title">Dashboard</h1>
-    <p class="view-subtitle">Quick access to common phrases and conversation history</p>
   </div>
 
   <div class="card">
     <h2 class="card-title">Quick Navigation</h2>
     <div class="tiles-grid" style="grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));">
-      <div class="tile" role="button" tabindex="0" onclick="showView('dashboard'); setTimeout(()=>{ const el=document.getElementById('quick-phrases'); if(el) el.scrollIntoView({behavior:'smooth', block:'start'}); }, 50);">
+      <button class="tile" onclick="showView('dashboard'); setTimeout(()=>{ const el=document.getElementById('quick-phrases'); if(el) el.scrollIntoView({behavior:'smooth', block:'start'}); }, 50);">
         <span class="tile-emoji">⚡</span>
-        <div class="tile-label">Quick Phrases</div>
-      </div>
-      <div class="tile" role="button" tabindex="0" onclick="showView('custom-phrase')">
+        <span class="tile-label">Quick Phrases</span>
+      </button>
+      <button class="tile" onclick="showView('custom-phrase')">
         <span class="tile-emoji">💬</span>
-        <div class="tile-label">Custom Phrase</div>
-      </div>
-      <div class="tile" role="button" tabindex="0" onclick="showView('captions-sign')">
+        <span class="tile-label">Custom Phrase</span>
+      </button>
+      <button class="tile" onclick="showView('captions-sign')">
         <span class="tile-emoji">🎤</span>
-        <div class="tile-label">Live Captions</div>
-      </div>
-      <div class="tile" role="button" tabindex="0" onclick="showView('sign')">
+        <span class="tile-label">Live Captions</span>
+      </button>
+      <button class="tile" onclick="showView('sign')">
         <span class="tile-emoji">📷</span>
-        <div class="tile-label">Sign to Speech</div>
-      </div>
-      <div class="tile" role="button" tabindex="0" onclick="showView('env-tests')">
+        <span class="tile-label">Sign to Speech</span>
+      </button>
+      <button class="tile" onclick="showView('env-tests')">
         <span class="tile-emoji">🧪</span>
-        <div class="tile-label">Env Tests</div>
-      </div>
+        <span class="tile-label">Env Tests</span>
+      </button>
     </div>
   </div>
 
