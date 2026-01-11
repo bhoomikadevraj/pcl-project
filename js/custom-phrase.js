@@ -7,6 +7,17 @@ function initCustomPhrase() {
   const saveBtn = document.getElementById('saveCustom');
   const textInput = document.getElementById('customText');
   
+  // Add accessibility attributes
+  if (textInput) {
+    textInput.setAttribute('aria-label', 'Enter custom phrase to speak');
+  }
+  if (speakBtn) {
+    speakBtn.setAttribute('aria-label', 'Speak the entered phrase');
+  }
+  if (saveBtn) {
+    saveBtn.setAttribute('aria-label', 'Save phrase as a tile on dashboard');
+  }
+  
   if (speakBtn) {
     speakBtn.onclick = () => {
       const text = textInput?.value.trim();

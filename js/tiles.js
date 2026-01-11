@@ -32,11 +32,26 @@ function renderTiles(){
   if (!grid) return;
   
   grid.innerHTML = '';
-  tiles.forEach(t=>{
+  tiles.forEach((t, index)=>{
     const btn = document.createElement('button');
     btn.className = 'tile';
-    btn.innerHTML = `<div class='tile-emoji'>${t.emoji}</div><div class='tile-label'>${t.label}</div>`;
-    btn.onclick = ()=>{ speak(t.phrase); addToLog(t.phrase); };
+    btn.setAttribute('aria-label', `${t.label}: ${t.phrase}`);
+    btn.setAttribute('type', 'button');
+    btn.innerHTML = `<div class='tile-emoji' aria-hidden='true'>${t.emoji}</div><div class='tile-label'>${t.label}</div>`;
+    
+    const handleActivation = () => { 
+      speak(t.phrase); 
+      addToLog(t.phrase);
+    };
+    
+    btn.onclick = handleActivation;
+    btn.onkeydown = (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleActivation();
+      }
+    };
+    
     grid.appendChild(btn);
   });
   
@@ -53,6 +68,9 @@ function initTiles() {
   // Restore old log
   const logEl = document.getElementById('log');
   if (logEl) {
+    logEl.setAttribute('role', 'log');
+    logEl.setAttribute('aria-live', 'polite');
+    logEl.setAttribute('aria-label', 'Conversation log');
     try {
       const stored = localStorage.getItem('logs');
       if (stored) {

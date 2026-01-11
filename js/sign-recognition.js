@@ -19,6 +19,16 @@ function initSignRecognition() {
   
   if (!video || !startCamBtn || !stopCamBtn || !signStatus) return;
   
+  // Add accessibility attributes
+  video.setAttribute('aria-label', 'Webcam feed for sign language recognition');
+  startCamBtn.setAttribute('aria-label', 'Start camera for sign recognition');
+  stopCamBtn.setAttribute('aria-label', 'Stop camera');
+  if (signStatus) {
+    signStatus.setAttribute('role', 'status');
+    signStatus.setAttribute('aria-live', 'polite');
+    signStatus.setAttribute('aria-atomic', 'true');
+  }
+  
   // Initialize MediaPipe Hands only once
   if (!handsInitialized) {
     hands = new Hands({ locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${f}` });

@@ -12,6 +12,14 @@ function initSpeechRecognition() {
   
   if (!toggleSTT || !sttLang || !captions) return;
   
+  // Add accessibility attributes
+  toggleSTT.setAttribute('aria-label', 'Toggle speech recognition');
+  sttLang.setAttribute('aria-label', 'Select speech recognition language');
+  captions.setAttribute('role', 'region');
+  captions.setAttribute('aria-live', 'polite');
+  captions.setAttribute('aria-atomic', 'false');
+  captions.setAttribute('aria-label', 'Live captions output');
+  
   if('SpeechRecognition' in window || 'webkitSpeechRecognition' in window){
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SR();

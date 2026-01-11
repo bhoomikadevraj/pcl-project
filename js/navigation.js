@@ -29,13 +29,30 @@ function initNavigation() {
   const navItems = document.querySelectorAll('.nav-item');
   const menuBtn = document.getElementById('sidebarToggle');
   const backdrop = document.getElementById('sidebar-backdrop');
+  const sidebar = document.querySelector('.sidebar');
   
-  // Navigation click handlers
+  // Add ARIA attributes to navigation
+  if (sidebar) {
+    sidebar.setAttribute('role', 'navigation');
+    sidebar.setAttribute('aria-label', 'Main navigation');
+  }
+  
+  // Navigation click and keyboard handlers
   navItems.forEach(item => {
-    item.addEventListener('click', (e) => {
+    item.setAttribute('role', 'button');
+    item.setAttribute('tabindex', '0');
+    
+    const handleActivation = (e) => {
       e.preventDefault();
       const viewId = item.getAttribute('data-view');
       showView(viewId);
+    };
+    
+    item.addEventListener('click', handleActivation);
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        handleActivation(e);
+      }
     });
   });
 
@@ -60,17 +77,40 @@ function initNavigation() {
 function openSidebar() {
   const menuBtn = document.getElementById('sidebarToggle');
   const backdrop = document.getElementById('sidebar-backdrop');
+  const sidebar = document.querySelector('.sidebar');
+  
   document.body.classList.add('sidebar-open');
   if (menuBtn) menuBtn.setAttribute('aria-expanded', 'true');
-  if (backdrop) backdrop.hidden = false;
+  if (backdrop) {
+    backdrop.hidden = false;
+    backdrop.setAttribute('aria-hidden', 'false');
+  }
+  
+  // Focus first nav item when sidebar opens on mobile
+  if (window.innerWidth <= 1024 && sidebar) {
+    const firstNavItem = sidebar.querySelector('.nav-item');
+    if (firstNavItem) {
+      setTimeout(() => firstNavItem.focus(), 100);
+    }
+  }
 }
 
 function closeSidebar() {
   const menuBtn = document.getElementById('sidebarToggle');
   const backdrop = document.getElementById('sidebar-backdrop');
+  
   document.body.classList.remove('sidebar-open');
-  if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
-  if (backdrop) backdrop.hidden = true;
+  if (menuBtn) {
+    menuBtn.setAttribute('aria-expanded', 'false');
+    // Return focus to menu button on mobile when closing
+    if (window.innerWidth <= 1024) {
+      menuBtn.focus();
+    }
+  }
+  if (backdrop) {
+    backdrop.hidden = true;
+    backdrop.setAttribute('aria-hidden', 'true');
+  }
 }
 
 function toggleSidebar() {

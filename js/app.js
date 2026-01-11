@@ -52,8 +52,9 @@ async function initApp() {
     
     headerContainer.innerHTML = headerHtml;
     sidebarContainer.innerHTML = sidebarHtml;
+    mainContentContainer.setAttribute('id', 'main-content-container');
     mainContentContainer.innerHTML = `
-      <main class="main-content">
+      <main class="main-content" role="main" aria-label="Main content">
         ${dashboardHtml}
         ${customPhraseHtml}
         ${liveCaptionsHtml}
