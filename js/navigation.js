@@ -3,6 +3,12 @@
 ----------------------------- */
 
 function showView(viewId) {
+  // Check if custom phrase requires auth
+  if (viewId === 'custom-phrase' && !currentUser) {
+    showNotification('Please sign in to use custom phrases', 'error');
+    viewId = 'dashboard'; // Redirect to dashboard
+  }
+  
   // Hide all views
   const views = document.querySelectorAll('.view');
   views.forEach(view => view.classList.remove('active'));

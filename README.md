@@ -2,7 +2,8 @@
 
 A static web app for accessible communication featuring:
 - Quick phrase tiles with text-to-speech
-- Custom phrases (save and speak)
+- **User authentication with Supabase**
+- **Custom phrases (save and speak) - requires login**
 - Live captions (Web Speech API speech-to-text)
 - Sign recognition demo (MediaPipe Hands)
 - Environment compatibility tests
@@ -10,12 +11,32 @@ A static web app for accessible communication featuring:
 ## Prerequisites
 - Modern Chrome/Edge (recommended). Safari has limited STT support.
 - HTTPS or http://localhost for camera (secure context requirement).
+- **Supabase account** for authentication and custom phrases
+
+## Setup
+
+### 1. Install Dependencies
+```bash
+npm install
+```
+
+### 2. Configure Supabase
+See [SUPABASE_SETUP.md](SUPABASE_SETUP.md) for detailed setup instructions.
+
+Quick steps:
+1. Create a Supabase project at [supabase.com](https://supabase.com)
+2. Get your credentials from Settings → API
+3. Update `js/supabase-config.js` with your credentials
+4. Run the SQL schema from `SUPABASE_SETUP.md`
+
+### 3. Start Development Server
+```bash
+npm run dev
+```
 
 ## Local Development
 
-Option A: Use live-server (no build step)
-1) Install Node.js >= 18
-2) Install dev server
+Option A: Use live-server (included in package.json)
 ```bash
 npm i -D live-server
 ```
@@ -35,11 +56,27 @@ Serve this folder as static content over HTTPS or on http://localhost. Examples:
 - If blocked: click the lock icon in the address bar → allow permissions → reload
 
 ## Features Overview
-- Dashboard: quick tiles and conversation log
-- Custom Phrase: enter, speak, and save phrases (persisted in localStorage)
-- Live Captions: real-time speech-to-text; pick language; captions shown on page
-- Sign to Speech: webcam + hand landmarks for a simple demo (thumb up/down, open palm)
-- Environment Tests: checks APIs and basic permissions availability
+- **Dashboard**: quick tiles and conversation log
+- **Custom Phrase**: enter, speak, and save phrases (requires login, syncs to database)
+- **Live Captions**: real-time speech-to-text; pick language; captions shown on page
+- **Sign to Speech**: webcam + hand landmarks for a simple demo (thumb up/down, open palm)
+- **Environment Tests**: checks APIs and basic permissions availability
+- **Authentication**: Supabase-powered user accounts
+
+## User Authentication
+- Sign up with email and password
+- Sign in to access custom phrases
+- Custom phrases are private and sync across devices
+- Sign out anytime from the top right
+
+## Database Structure
+Custom phrases are stored in Supabase with:
+- User-specific access (RLS policies)
+- Real-time synchronization
+- Persistent storage
+- Secure and private
+
+See [SUPABASE_SETUP.md](SUPABASE_SETUP.md) for schema details.
 
 ## Deployment (GitHub Pages)
 - Workflow in `.github/workflows/static.yml` publishes the repository root

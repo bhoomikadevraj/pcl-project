@@ -1,0 +1,91 @@
+<!-- Compact Profile Icon with Dropdown -->
+<div id="profile-menu" class="profile-menu">
+  <!-- Profile Button (always visible) -->
+  <button id="profile-btn" class="profile-btn" aria-label="Account menu">
+    <span class="profile-icon">👤</span>
+  </button>
+  
+  <!-- Dropdown Menu -->
+  <div id="profile-dropdown" class="profile-dropdown" style="display: none;">
+    <!-- When NOT logged in -->
+    <div id="auth-menu" class="auth-menu">
+      <div class="dropdown-header">Account</div>
+      <button id="show-signin-btn" class="dropdown-item">
+        <span>🔐</span> Sign In
+      </button>
+      <button id="show-signup-btn" class="dropdown-item">
+        <span>✨</span> Create Account
+      </button>
+    </div>
+    
+    <!-- When logged in -->
+    <div id="user-menu" class="user-menu" style="display: none;">
+      <div class="dropdown-header">
+        <div class="user-email-display"></div>
+      </div>
+      <div class="dropdown-divider"></div>
+      <button id="signout-btn-menu" class="dropdown-item">
+        <span>🚪</span> Sign Out
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Sign In Modal -->
+<div id="signin-modal" class="auth-modal" style="display: none;">
+  <div class="modal-overlay"></div>
+  <div class="modal-content">
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <h3 class="modal-title">Sign In</h3>
+    
+    <form id="signin-form" class="auth-form">
+      <div class="form-group">
+        <label for="signin-email" class="form-label">Email</label>
+        <input type="email" id="signin-email" class="form-input" placeholder="you@example.com" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="signin-password" class="form-label">Password</label>
+        <input type="password" id="signin-password" class="form-input" placeholder="••••••••" required>
+      </div>
+      
+      <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+      
+      <div class="modal-footer">
+        Don't have an account? <a href="#" id="switch-to-signup">Create one</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Sign Up Modal -->
+<div id="signup-modal" class="auth-modal" style="display: none;">
+  <div class="modal-overlay"></div>
+  <div class="modal-content">
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <h3 class="modal-title">Create Account</h3>
+    
+    <form id="signup-form" class="auth-form">
+      <div class="form-group">
+        <label for="signup-email" class="form-label">Email</label>
+        <input type="email" id="signup-email" class="form-input" placeholder="you@example.com" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="signup-password" class="form-label">Password</label>
+        <input type="password" id="signup-password" class="form-input" placeholder="••••••••" minlength="6" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="signup-password-confirm" class="form-label">Confirm Password</label>
+        <input type="password" id="signup-password-confirm" class="form-input" placeholder="••••••••" minlength="6" required>
+      </div>
+      
+      <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+      
+      <div class="modal-footer">
+        Already have an account? <a href="#" id="switch-to-signin">Sign in</a>
+      </div>
+    </form>
+  </div>
+</div>

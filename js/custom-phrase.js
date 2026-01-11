@@ -29,13 +29,32 @@ function initCustomPhrase() {
   }
   
   if (saveBtn) {
-    saveBtn.onclick = () => {
+    saveBtn.onclick = async () => {
+      if (!currentUser) {
+        showNotification('Please sign in to save custom phrases', 'error');
+        return;
+      }
+      
       const text = textInput?.value.trim();
-      if (text) { 
-        tiles.push({ emoji:'💬', label:text.slice(0,12), phrase:text }); 
-        renderTiles(); 
-        if (textInput) textInput.value = '';
-        showView('dashboard'); // Navigate back to dashboard
+      if (text) {
+        const label = text.slice(0, 12);
+        
+        // Save to database
+        const result = await saveCustomPhraseToDb(text, label, '💬');
+        
+        if (result.success) {
+          // Add to local tiles
+          tiles.push({ 
+            emoji: '💬', 
+            label: label, 
+            phrase: text,
+            id: result.data.id 
+          }); 
+          renderTiles(); 
+          
+          if (textInput) textInput.value = '';
+          showView('dashboard'); // Navigate back to dashboard
+        }
       }
     };
   }

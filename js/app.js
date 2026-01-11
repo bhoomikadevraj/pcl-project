@@ -32,6 +32,7 @@ async function initApp() {
     const components = await Promise.all([
       loadComponent('components/header.html').catch(e => { throw new Error('Failed to load header'); }),
       loadComponent('components/sidebar.html').catch(e => { throw new Error('Failed to load sidebar'); }),
+      loadComponent('components/auth.html').catch(e => { throw new Error('Failed to load auth'); }),
       loadComponent('components/views/dashboard.html').catch(e => { throw new Error('Failed to load dashboard'); }),
       loadComponent('components/views/custom-phrase.html').catch(e => { throw new Error('Failed to load custom phrase view'); }),
       loadComponent('components/views/live-captions.html').catch(e => { throw new Error('Failed to load live captions view'); }),
@@ -39,7 +40,7 @@ async function initApp() {
       loadComponent('components/views/environment-tests.html').catch(e => { throw new Error('Failed to load environment tests view'); })
     ]);
     
-    const [headerHtml, sidebarHtml, dashboardHtml, customPhraseHtml, liveCaptionsHtml, signRecognitionHtml, environmentTestsHtml] = components;
+    const [headerHtml, sidebarHtml, authHtml, dashboardHtml, customPhraseHtml, liveCaptionsHtml, signRecognitionHtml, environmentTestsHtml] = components;
     
     // Insert components into containers
     const headerContainer = document.getElementById('header-container');
@@ -50,7 +51,8 @@ async function initApp() {
       throw new Error('Required containers not found in DOM');
     }
     
-    headerContainer.innerHTML = headerHtml;
+    // Add auth to header
+    headerContainer.innerHTML = headerHtml + authHtml;
     sidebarContainer.innerHTML = sidebarHtml;
     mainContentContainer.setAttribute('id', 'main-content-container');
     mainContentContainer.innerHTML = `
@@ -64,6 +66,8 @@ async function initApp() {
     `;
     
     // Initialize all modules with error handling
+    try { initAuth(); } catch(e) { console.error('Auth init failed:', e); }
+    try { initAuthUI(); } catch(e) { console.error('Auth UI init failed:', e); }
     try { initNavigation(); } catch(e) { console.error('Navigation init failed:', e); }
     try { initTiles(); } catch(e) { console.error('Tiles init failed:', e); }
     try { initCustomPhrase(); } catch(e) { console.error('Custom phrase init failed:', e); }

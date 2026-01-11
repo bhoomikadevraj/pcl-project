@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supabase Connection Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f6fbf8;
+    }
+    .test-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 { color: #10b981; margin-top: 0; }
+    h2 { color: #059669; font-size: 18px; margin-top: 0; }
+    .status { 
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+    .status.pass { background: #dcfce7; color: #166534; }
+    .status.fail { background: #fee2e2; color: #991b1b; }
+    .status.pending { background: #fef3c7; color: #92400e; }
+    button {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      margin-right: 10px;
+      margin-top: 10px;
+    }
+    button:hover { background: #059669; }
+    button:disabled { 
+      background: #d1d5db; 
+      cursor: not-allowed;
+    }
+    .log {
+      background: #f3f4f6;
+      padding: 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 13px;
+      max-height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      margin-top: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 Supabase Connection Tester</h1>
+  
+  <div class="test-card">
+    <h2>1. Supabase Library <span class="status pending" id="lib-status">Checking...</span></h2>
+    <div id="lib-log" class="log"></div>
+  </div>
+
+  <div class="test-card">
+    <h2>2. Configuration <span class="status pending" id="config-status">Checking...</span></h2>
+    <div id="config-log" class="log"></div>
+  </div>
+
+  <div class="test-card">
+    <h2>3. Connection Test <span class="status pending" id="conn-status">Ready</span></h2>
+    <button onclick="testConnection()">Test Connection</button>
+    <div id="conn-log" class="log"></div>
+  </div>
+
+  <div class="test-card">
+    <h2>4. Sign Up Test <span class="status pending" id="signup-status">Ready</span></h2>
+    <input type="email" id="test-email" placeholder="test@example.com" value="test@example.com">
+    <input type="password" id="test-password" placeholder="password" value="test123456">
+    <button onclick="testSignUp()">Test Sign Up</button>
+    <div id="signup-log" class="log"></div>
+  </div>
+
+  <div class="test-card">
+    <h2>5. Table Check <span class="status pending" id="table-status">Ready</span></h2>
+    <button onclick="testTable()">Check custom_phrases Table</button>
+    <div id="table-log" class="log"></div>
+  </div>
+
+  <!-- Load Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <script>
+    // Load config from main app
+    const SUPABASE_URL = 'https://eagjfsjojrzjbrcmolcs.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhZ2pmc2pvanJ6amJyY21vbGNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxMjk0NzUsImV4cCI6MjA4MzcwNTQ3NX0.AIuE_yZaIkBmf0uQtKwzTxMTYoZmrxCmUQ0jIEgv8n0';
+
+    let supabaseClient;
+
+    // Test 1: Check library
+    function checkLibrary() {
+      const status = document.getElementById('lib-status');
+      const log = document.getElementById('lib-log');
+      
+      if (typeof window.supabase === 'undefined') {
+        status.className = 'status fail';
+        status.textContent = 'FAIL';
+        log.textContent = '❌ Supabase library not loaded from CDN';
+        return false;
+      }
+      
+      status.className = 'status pass';
+      status.textContent = 'PASS';
+      log.textContent = '✅ Supabase library loaded successfully';
+      return true;
+    }
+
+    // Test 2: Check config
+    function checkConfig() {
+      const status = document.getElementById('config-status');
+      const log = document.getElementById('config-log');
+      let output = '';
+      
+      if (!SUPABASE_URL || SUPABASE_URL === 'YOUR_SUPABASE_URL') {
+        status.className = 'status fail';
+        status.textContent = 'FAIL';
+        log.textContent = '❌ Supabase URL not configured';
+        return false;
+      }
+      
+      output += `✅ URL: ${SUPABASE_URL}\n`;
+      
+      if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
+        status.className = 'status fail';
+        status.textContent = 'FAIL';
+        log.textContent = '❌ Supabase ANON KEY not configured';
+        return false;
+      }
+      
+      output += `✅ ANON KEY: ${SUPABASE_ANON_KEY.substring(0, 20)}...`;
+      
+      try {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        output += '\n✅ Supabase client created successfully';
+        status.className = 'status pass';
+        status.textContent = 'PASS';
+      } catch (error) {
+        output += '\n❌ Failed to create client: ' + error.message;
+        status.className = 'status fail';
+        status.textContent = 'FAIL';
+        log.textContent = output;
+        return false;
+      }
+      
+      log.textContent = output;
+      return true;
+    }
+
+    // Test 3: Connection
+    window.testConnection = async function() {
+      const status = document.getElementById('conn-status');
+      const log = document.getElementById('conn-log');
+      
+      status.className = 'status pending';
+      status.textContent = 'Testing...';
+      log.textContent = 'Testing connection to Supabase...';
+      
+      try {
+        const { data, error } = await supabaseClient.auth.getSession();
+        
+        if (error) throw error;
+        
+        status.className = 'status pass';
+        status.textContent = 'PASS';
+        log.textContent = '✅ Connected to Supabase successfully!\n' +
+                          'Session: ' + (data.session ? 'Active' : 'None');
+      } catch (error) {
+        status.className = 'status fail';
+        status.textContent = 'FAIL';
+        log.textContent = '❌ Connection failed:\n' + error.message;
+      }
+    }
+
+    // Test 4: Sign up
+    window.testSignUp = async function() {
+      const status = document.getElementById('signup-status');
+      const log = document.getElementById('signup-log');
+      const email = document.getElementById('test-email').value;
+      const password = document.getElementById('test-password').value;
+      
+      status.className = 'status pending';
+      status.textContent = 'Testing...';
+      log.textContent = `Attempting sign up with:\nEmail: ${email}\nPassword: ${password}\n\n`;
+      
+      try {
+        const { data, error } = await supabaseClient.auth.signUp({ email, password });
+        
+        log.textContent += 'Response received:\n' + JSON.stringify({ data, error }, null, 2);
+        
+        if (error) throw error;
+        
+        status.className = 'status pass';
+        status.textContent = 'PASS';
+        log.textContent += '\n\n✅ Sign up successful!';
+        
+        if (data.user && !data.session) {
+          log.textContent += '\n⚠️ Email confirmation required';
+        } else if (data.session) {
+          log.textContent += '\n✅ Auto signed in!';
+        }
+      } catch (error) {
+        status.className = 'status fail';
+        status.textContent = 'FAIL';
+        log.textContent += '\n\n❌ Sign up failed:\n' + error.message;
+      }
+    }
+
+    // Test 5: Table check
+    window.testTable = async function() {
+      const status = document.getElementById('table-status');
+      const log = document.getElementById('table-log');
+      
+      status.className = 'status pending';
+      status.textContent = 'Checking...';
+      log.textContent = 'Checking if custom_phrases table exists...';
+      
+      try {
+        // Try to query the table
+        const { data, error } = await supabaseClient
+          .from('custom_phrases')
+          .select('count')
+          .limit(1);
+        
+        if (error) {
+          if (error.message.includes('relation') || error.message.includes('does not exist')) {
+            status.className = 'status fail';
+            status.textContent = 'FAIL';
+            log.textContent = '❌ Table "custom_phrases" does not exist!\n\n' +
+                              'You need to create it by running the SQL from SUPABASE_SETUP.md:\n' +
+                              '1. Go to Supabase Dashboard → SQL Editor\n' +
+                              '2. Run the CREATE TABLE script\n' +
+                              '3. Come back and test again';
+            return;
+          }
+          throw error;
+        }
+        
+        status.className = 'status pass';
+        status.textContent = 'PASS';
+        log.textContent = '✅ Table "custom_phrases" exists and is accessible!';
+      } catch (error) {
+        status.className = 'status fail';
+        status.textContent = 'FAIL';
+        log.textContent = '❌ Error checking table:\n' + error.message;
+      }
+    }
+
+    // Run initial tests
+    window.onload = () => {
+      const libOk = checkLibrary();
+      if (libOk) {
+        checkConfig();
+      }
+    };
+  </script>
+</body>
+</html>
