@@ -2,12 +2,13 @@
    Sign Recognition (Webcam + MediaPipe Hands)
 ----------------------------- */
 
-let hands;
+let hands = null;
 let rafId = null;
 let stream = null;
 let processing = false;
 let lastSign = ''; 
 let lastAt = 0; // debounce repeated detections
+let handsInitialized = false;
 
 function initSignRecognition() {
   const video = document.getElementById('webcam');
@@ -18,14 +19,17 @@ function initSignRecognition() {
   
   if (!video || !startCamBtn || !stopCamBtn || !signStatus) return;
   
-  // Initialize MediaPipe Hands
-  hands = new Hands({ locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${f}` });
-  hands.setOptions({ 
-    maxNumHands:1, 
-    modelComplexity:1, 
-    minDetectionConfidence:0.7, 
-    minTrackingConfidence:0.7 
-  });
+  // Initialize MediaPipe Hands only once
+  if (!handsInitialized) {
+    hands = new Hands({ locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${f}` });
+    hands.setOptions({ 
+      maxNumHands:1, 
+      modelComplexity:1, 
+      minDetectionConfidence:0.7, 
+      minTrackingConfidence:0.7 
+    });
+    handsInitialized = true;
+  }
 
   hands.onResults(results => {
     if(results.multiHandLandmarks && results.multiHandLandmarks.length){
@@ -103,7 +107,26 @@ function initSignRecognition() {
     if(stream){ stream.getTracks().forEach(t=>t.stop()); stream = null; }
     video.srcObject = null;
     signStatus.textContent = 'Sign: (stopped)';
+    lastSign = '';
+    lastAt = 0;
   }
+  
+  // Cleanup function for when view is destroyed
+  function cleanupSignRecognition() {
+    stopCamera();
+    if (hands) {
+      try {
+        hands.close();
+      } catch(e) {
+        console.warn('Error closing MediaPipe Hands:', e);
+      }
+      hands = null;
+      handsInitialized = false;
+    }
+  }
+  
+  // Expose cleanup function globally for cleanup-observer
+  window.cleanupSignRecognition = cleanupSignRecognition;
 
   function showHelp(message){
     if (cameraHelp) {

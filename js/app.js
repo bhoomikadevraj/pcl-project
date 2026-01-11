@@ -2,27 +2,56 @@
    Main Application Initialization
 ----------------------------- */
 
+function showError(message) {
+  const body = document.body;
+  const errorDiv = document.createElement('div');
+  errorDiv.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#ef4444;color:white;padding:16px 24px;border-radius:8px;box-shadow:0 4px 6px rgba(0,0,0,0.1);z-index:9999;max-width:90%;text-align:center;';
+  errorDiv.innerHTML = `<strong>Error:</strong> ${message}`;
+  body.appendChild(errorDiv);
+  setTimeout(() => errorDiv.remove(), 5000);
+}
+
+function showLoading(show) {
+  let loader = document.getElementById('app-loader');
+  if (show && !loader) {
+    loader = document.createElement('div');
+    loader.id = 'app-loader';
+    loader.style.cssText = 'position:fixed;inset:0;background:rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center;z-index:9999;';
+    loader.innerHTML = '<div style="text-align:center;"><div style="width:48px;height:48px;border:4px solid #e2e8f0;border-top-color:#10b981;border-radius:50%;animation:spin 1s linear infinite;"></div><p style="margin-top:16px;color:#475569;font-weight:500;">Loading...</p></div><style>@keyframes spin{to{transform:rotate(360deg)}}</style>';
+    document.body.appendChild(loader);
+  } else if (!show && loader) {
+    loader.remove();
+  }
+}
+
 async function initApp() {
-  // Load components
-  const headerHtml = await loadComponent('components/header.html');
-  const sidebarHtml = await loadComponent('components/sidebar.html');
-  
-  // Load all view components
-  const dashboardHtml = await loadComponent('components/views/dashboard.html');
-  const customPhraseHtml = await loadComponent('components/views/custom-phrase.html');
-  const liveCaptionsHtml = await loadComponent('components/views/live-captions.html');
-  const signRecognitionHtml = await loadComponent('components/views/sign-recognition.html');
-  const environmentTestsHtml = await loadComponent('components/views/environment-tests.html');
-  
-  // Insert components into containers
-  const headerContainer = document.getElementById('header-container');
-  const sidebarContainer = document.getElementById('sidebar-container');
-  const mainContentContainer = document.getElementById('main-content-container');
-  
-  if (headerContainer) headerContainer.innerHTML = headerHtml;
-  if (sidebarContainer) sidebarContainer.innerHTML = sidebarHtml;
-  
-  if (mainContentContainer) {
+  try {
+    showLoading(true);
+    
+    // Load components with error tracking
+    const components = await Promise.all([
+      loadComponent('components/header.html').catch(e => { throw new Error('Failed to load header'); }),
+      loadComponent('components/sidebar.html').catch(e => { throw new Error('Failed to load sidebar'); }),
+      loadComponent('components/views/dashboard.html').catch(e => { throw new Error('Failed to load dashboard'); }),
+      loadComponent('components/views/custom-phrase.html').catch(e => { throw new Error('Failed to load custom phrase view'); }),
+      loadComponent('components/views/live-captions.html').catch(e => { throw new Error('Failed to load live captions view'); }),
+      loadComponent('components/views/sign-recognition.html').catch(e => { throw new Error('Failed to load sign recognition view'); }),
+      loadComponent('components/views/environment-tests.html').catch(e => { throw new Error('Failed to load environment tests view'); })
+    ]);
+    
+    const [headerHtml, sidebarHtml, dashboardHtml, customPhraseHtml, liveCaptionsHtml, signRecognitionHtml, environmentTestsHtml] = components;
+    
+    // Insert components into containers
+    const headerContainer = document.getElementById('header-container');
+    const sidebarContainer = document.getElementById('sidebar-container');
+    const mainContentContainer = document.getElementById('main-content-container');
+    
+    if (!headerContainer || !sidebarContainer || !mainContentContainer) {
+      throw new Error('Required containers not found in DOM');
+    }
+    
+    headerContainer.innerHTML = headerHtml;
+    sidebarContainer.innerHTML = sidebarHtml;
     mainContentContainer.innerHTML = `
       <main class="main-content">
         ${dashboardHtml}
@@ -32,15 +61,21 @@ async function initApp() {
         ${environmentTestsHtml}
       </main>
     `;
+    
+    // Initialize all modules with error handling
+    try { initNavigation(); } catch(e) { console.error('Navigation init failed:', e); }
+    try { initTiles(); } catch(e) { console.error('Tiles init failed:', e); }
+    try { initCustomPhrase(); } catch(e) { console.error('Custom phrase init failed:', e); }
+    try { initSpeechRecognition(); } catch(e) { console.error('Speech recognition init failed:', e); }
+    try { initSignRecognition(); } catch(e) { console.error('Sign recognition init failed:', e); }
+    try { initEnvironmentTests(); } catch(e) { console.error('Environment tests init failed:', e); }
+    
+    showLoading(false);
+  } catch (error) {
+    showLoading(false);
+    console.error('App initialization failed:', error);
+    showError(error.message || 'Failed to initialize app. Please refresh the page.');
   }
-  
-  // Initialize all modules
-  initNavigation();
-  initTiles();
-  initCustomPhrase();
-  initSpeechRecognition();
-  initSignRecognition();
-  initEnvironmentTests();
 }
 
 // Initialize app when DOM is loaded

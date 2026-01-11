@@ -2,7 +2,7 @@
    Tiles Management
 ----------------------------- */
 
-let tiles = JSON.parse(localStorage.getItem('tiles')||'null') || [
+const defaultTiles = [
   { emoji: "👋", label: "Hello", phrase: "Hello!" },
   { emoji: "👍", label: "Yes", phrase: "Yes" },
   { emoji: "👎", label: "No", phrase: "No" },
@@ -10,6 +10,22 @@ let tiles = JSON.parse(localStorage.getItem('tiles')||'null') || [
   { emoji: "😊", label: "Thank You", phrase: "Thank you" },
   { emoji: "🆘", label: "Help", phrase: "I need help" },
 ];
+
+function loadTilesFromStorage() {
+  try {
+    const stored = localStorage.getItem('tiles');
+    if (!stored) return defaultTiles;
+    const parsed = JSON.parse(stored);
+    if (Array.isArray(parsed) && parsed.every(t => t.emoji && t.label && t.phrase)) {
+      return parsed;
+    }
+  } catch(e) {
+    console.warn('Failed to load tiles from storage, using defaults:', e);
+  }
+  return defaultTiles;
+}
+
+let tiles = loadTilesFromStorage();
 
 function renderTiles(){
   const grid = document.getElementById('grid');
@@ -23,7 +39,12 @@ function renderTiles(){
     btn.onclick = ()=>{ speak(t.phrase); addToLog(t.phrase); };
     grid.appendChild(btn);
   });
-  localStorage.setItem('tiles', JSON.stringify(tiles));
+  
+  try {
+    localStorage.setItem('tiles', JSON.stringify(tiles));
+  } catch(e) {
+    console.warn('Failed to save tiles to localStorage:', e);
+  }
 }
 
 function initTiles() {
@@ -32,11 +53,23 @@ function initTiles() {
   // Restore old log
   const logEl = document.getElementById('log');
   if (logEl) {
-    (JSON.parse(localStorage.getItem('logs')||'[]')).forEach(line=>{
-      const d = document.createElement('div');
-      d.className = 'log-entry';
-      d.textContent = line;
-      logEl.appendChild(d);
-    });
+    try {
+      const stored = localStorage.getItem('logs');
+      if (stored) {
+        const logs = JSON.parse(stored);
+        if (Array.isArray(logs)) {
+          logs.forEach(line=>{
+            if (typeof line === 'string') {
+              const d = document.createElement('div');
+              d.className = 'log-entry';
+              d.textContent = line;
+              logEl.appendChild(d);
+            }
+          });
+        }
+      }
+    } catch(e) {
+      console.warn('Failed to restore logs from localStorage:', e);
+    }
   }
 }

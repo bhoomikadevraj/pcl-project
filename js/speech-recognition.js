@@ -29,7 +29,21 @@ function initSpeechRecognition() {
         const t = event.results[i][0].transcript;
         if(event.results[i].isFinal){ final += t + ' '; } else { interim += t; }
       }
-      captions.innerHTML = `<div style="margin-bottom:8px;"><strong>Final:</strong> ${final}</div><div><em>Interim:</em> ${interim}</div>`;
+      // Use textContent to prevent XSS
+      const finalDiv = document.createElement('div');
+      finalDiv.style.marginBottom = '8px';
+      finalDiv.innerHTML = '<strong>Final:</strong> ';
+      const finalText = document.createTextNode(final);
+      finalDiv.appendChild(finalText);
+      
+      const interimDiv = document.createElement('div');
+      interimDiv.innerHTML = '<em>Interim:</em> ';
+      const interimText = document.createTextNode(interim);
+      interimDiv.appendChild(interimText);
+      
+      captions.innerHTML = '';
+      captions.appendChild(finalDiv);
+      captions.appendChild(interimDiv);
     };
     
     recognition.onerror = (e)=>{
