@@ -43,14 +43,13 @@ function initCustomPhrase() {
         const result = await saveCustomPhraseToDb(text, label, '💬');
         
         if (result.success) {
-          // Add to local tiles
-          tiles.push({ 
+          // Add to local tiles using the new function
+          addCustomPhrase({ 
             emoji: '💬', 
             label: label, 
             phrase: text,
             id: result.data.id 
-          }); 
-          renderTiles(); 
+          });
           
           if (textInput) textInput.value = '';
           showView('dashboard'); // Navigate back to dashboard

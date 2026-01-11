@@ -294,6 +294,23 @@ header {
   margin-bottom:24px;
 }
 
+.category-heading {
+  grid-column: 1 / -1;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 24px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--primary);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.category-heading:first-child {
+  margin-top: 0;
+}
+
 .tile{
   background:var(--panel);
   border:1px solid var(--line);
