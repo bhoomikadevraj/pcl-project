@@ -39,6 +39,7 @@ const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; // Paste your anon key
 CREATE TABLE custom_phrases (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  user_email TEXT,
   phrase TEXT NOT NULL,
   label TEXT NOT NULL,
   emoji TEXT DEFAULT '💬',
@@ -134,11 +135,20 @@ CREATE TRIGGER update_custom_phrases_updated_at
 custom_phrases
 ├── id (UUID, Primary Key)
 ├── user_id (UUID, Foreign Key to auth.users)
+├── user_email (TEXT, for easy identification)
 ├── phrase (TEXT, Not Null)
 ├── label (TEXT, Not Null)
 ├── emoji (TEXT, Default '💬')
 ├── created_at (TIMESTAMP)
 └── updated_at (TIMESTAMP)
+```
+
+## 🔄 Updating Existing Tables
+
+If you already created the `custom_phrases` table without `user_email`, run this:
+
+```sql
+ALTER TABLE custom_phrases ADD COLUMN IF NOT EXISTS user_email TEXT;
 ```
 
 ## 🎯 How It Works

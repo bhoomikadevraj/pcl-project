@@ -5,6 +5,7 @@
 CREATE TABLE IF NOT EXISTS conversation_logs (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  user_email TEXT,
   phrase TEXT NOT NULL,
   timestamp TIMESTAMPTZ DEFAULT NOW(),
   created_at TIMESTAMPTZ DEFAULT NOW()
@@ -41,3 +42,6 @@ CREATE INDEX IF NOT EXISTS conversation_logs_timestamp_idx ON conversation_logs(
 -- 3. Copy and paste this entire SQL script
 -- 4. Click "Run" to create the table and policies
 -- 5. Verify the table was created in the Table Editor
+
+-- IF TABLE ALREADY EXISTS - Run this to add email column:
+-- ALTER TABLE conversation_logs ADD COLUMN IF NOT EXISTS user_email TEXT;

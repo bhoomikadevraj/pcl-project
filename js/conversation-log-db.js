@@ -9,11 +9,15 @@ async function saveLogToDb(phrase) {
   }
   
   try {
+    const userEmail = currentUser.email || 'unknown';
+    console.log('Saving log with email:', userEmail);
+    
     const { error } = await supabaseClient
       .from('conversation_logs')
       .insert([
         {
           user_id: currentUser.id,
+          user_email: userEmail,
           phrase: phrase,
           timestamp: new Date().toISOString()
         }

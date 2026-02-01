@@ -68,11 +68,15 @@ async function saveCustomPhraseToDb(phrase, label, emoji = '💬') {
   }
   
   try {
+    const userEmail = currentUser.email || 'unknown';
+    console.log('Saving phrase with email:', userEmail);
+    
     const { data, error } = await supabaseClient
       .from('custom_phrases')
       .insert([
         {
           user_id: currentUser.id,
+          user_email: userEmail,
           phrase: phrase,
           label: label,
           emoji: emoji
