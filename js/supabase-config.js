@@ -3,8 +3,8 @@
 ----------------------------- */
 
 // TODO: Replace with your actual Supabase project credentials
-const SUPABASE_URL = 'https://eagjfsjojrzjbrcmolcs.supabase.co'; // e.g., https://xxxxx.supabase.co
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhZ2pmc2pvanJ6amJyY21vbGNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxMjk0NzUsImV4cCI6MjA4MzcwNTQ3NX0.AIuE_yZaIkBmf0uQtKwzTxMTYoZmrxCmUQ0jIEgv8n0';
+const SUPABASE_URL = 'YOUR_SUPABASE_URL'; // e.g., https://xxxxx.supabase.co
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
 // Initialize Supabase client
 let supabaseClient;
