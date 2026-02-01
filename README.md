@@ -1,54 +1,44 @@
-# Sign Sync – Accessible Communicator
+# Sign Sync – Accessible Communicator 🤝
 
-A static web app for accessible communication featuring:
-- Quick phrase tiles with text-to-speech
-- **User authentication with Supabase**
-- **Custom phrases (save and speak) - requires login**
-- Live captions (Web Speech API speech-to-text)
-- Sign recognition demo (MediaPipe Hands)
-- Environment compatibility tests
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://bhoomikadevraj.github.io/pcl-project/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-## Prerequisites
-- Modern Chrome/Edge (recommended). Safari has limited STT support.
-- HTTPS or http://localhost for camera (secure context requirement).
-- **Supabase account** for authentication and custom phrases
+> A free, web-based accessible communication tool featuring speech recognition, sign language detection, and customizable phrases.
 
-## Setup
+## ✨ Features
 
-### 1. Install Dependencies
+- 🗣️ **Text-to-Speech** - Quick phrase tiles with natural voice output
+- 🔐 **User Authentication** - Secure accounts powered by Supabase
+- 💾 **Custom Phrases** - Save and sync your favorite phrases (requires login)
+- 🎙️ **Live Captions** - Real-time speech-to-text with multiple languages
+- 👋 **Sign Recognition** - Basic hand gesture detection using MediaPipe
+- ♿ **Fully Accessible** - WCAG compliant, keyboard navigation, screen reader friendly
+- 📱 **Progressive Web App** - Install on any device, works offline
+- 🔒 **Privacy-First** - All processing happens locally, no tracking
+
+## 🚀 Quick Start
+
+### Live Demo
+Visit **[https://bhoomikadevraj.github.io/pcl-project/](https://bhoomikadevraj.github.io/pcl-project/)**
+
+### Local Development
+
 ```bash
+# 1. Clone the repository
+git clone https://github.com/bhoomikadevraj/pcl-project.git
+cd pcl-project
+
+# 2. Install dependencies
 npm install
-```
 
-### 2. Configure Supabase
-See [SUPABASE_SETUP.md](SUPABASE_SETUP.md) for detailed setup instructions.
+# 3. Configure Supabase (see SUPABASE_SETUP.md)
+# Update js/supabase-config.js with your credentials
 
-Quick steps:
-1. Create a Supabase project at [supabase.com](https://supabase.com)
-2. Get your credentials from Settings → API
-3. Update `js/supabase-config.js` with your credentials
-4. Run the SQL schema from `SUPABASE_SETUP.md`
-
-### 3. Start Development Server
-```bash
+# 4. Start development server
 npm run dev
+# Opens at http://localhost:5500
 ```
-
-## Local Development
-
-Option A: Use live-server (included in package.json)
-```bash
-npm i -D live-server
-```
-3) Start server
-```bash
-npx live-server --open=index.html --port=5500
-```
-
-Option B: Any static server
-Serve this folder as static content over HTTPS or on http://localhost. Examples:
-- VS Code Live Server extension
-- `python -m http.server` (camera may not work without HTTPS)
 
 ## Browser Permissions
 - Camera (Sign to Speech): grant access when prompted
