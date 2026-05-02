@@ -36,7 +36,7 @@ async function loadUserPhrases() {
     if (error) {
       // Check if table doesn't exist
       if (error.message.includes('relation') || error.message.includes('does not exist')) {
-        console.error('Table "custom_phrases" does not exist. Please run the SQL schema from SUPABASE_SETUP.md');
+        console.error('Table "custom_phrases" does not exist. Please run the SQL schema from docs/SUPABASE_SETUP.md');
         showNotification('Database not set up. Please check setup instructions.', 'error');
       }
       throw error;

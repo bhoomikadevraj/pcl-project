@@ -2,7 +2,7 @@
 
 [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://bhoomikadevraj.github.io/pcl-project/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](docs/CONTRIBUTING.md)
 
 > A free, web-based accessible communication tool featuring speech recognition, sign language detection, and customizable phrases.
 
@@ -32,7 +32,7 @@ cd pcl-project
 # 2. Install dependencies
 npm install
 
-# 3. Configure Supabase (see SUPABASE_SETUP.md)
+# 3. Configure Supabase (see docs/SUPABASE_SETUP.md)
 # Update js/supabase-config.js with your credentials
 
 # 4. Start development server
@@ -66,7 +66,7 @@ Custom phrases are stored in Supabase with:
 - Persistent storage
 - Secure and private
 
-See [SUPABASE_SETUP.md](SUPABASE_SETUP.md) for schema details.
+See [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md) for setup details.
 
 ## Deployment (GitHub Pages)
 - Workflow in `.github/workflows/static.yml` publishes the repository root
